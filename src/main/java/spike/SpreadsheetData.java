@@ -10,7 +10,6 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.hssf.util.CellReference;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellValue;
 import org.apache.poi.ss.usermodel.DateUtil;
@@ -139,7 +138,10 @@ public class SpreadsheetData {
 				Object value = objectFrom((HSSFWorkbook) row.getSheet().getWorkbook(),
 						row.getCell(cell.getColumnIndex()));
 				System.out.println(String.format("setting field '%s', to value '%s'", fieldName, value.toString()));
-				field.set(obj, value);
+				// TODO: Cast this to the field's datatype
+				//field.set(obj, value);
+				Class<?> fieldClass = field.getType();
+				field.set(obj, fieldClass.cast(value));				
 			} catch (NoSuchFieldException e) {
 				e.printStackTrace();
 			} catch (SecurityException e) {
