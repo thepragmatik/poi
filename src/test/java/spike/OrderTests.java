@@ -9,8 +9,8 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 
-import model.Order;
-import model.TestCaseData;
+import spike.model.Order;
+import spike.model.TestCaseData;
 
 /**
  * Using a parameterized test with an Excel spreadsheet.

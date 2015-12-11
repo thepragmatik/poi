@@ -1,7 +1,7 @@
 /**
  * 
  */
-package model;
+package spike.model;
 
 /**
  * @author rahul.thakur

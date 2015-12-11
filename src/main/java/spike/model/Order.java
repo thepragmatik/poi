@@ -1,4 +1,4 @@
-package model;
+package spike.model;
 
 import java.util.Date;
 

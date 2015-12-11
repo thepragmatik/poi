@@ -1,4 +1,4 @@
-package model;
+package spike.model;
 
 public class OrderDetails {
 

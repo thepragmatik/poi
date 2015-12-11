@@ -18,9 +18,9 @@ import org.apache.poi.ss.usermodel.FormulaEvaluator;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 
-import model.Order;
-import model.OrderDetails;
-import model.TestCaseData;
+import spike.model.Order;
+import spike.model.OrderDetails;
+import spike.model.TestCaseData;
 
 /**
  * Read data in an Excel spreadsheet and return it as a collection of objects.
