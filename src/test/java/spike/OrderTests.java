@@ -34,7 +34,7 @@ public class OrderTests {
 	}
 
 	@Test
-	public void should_calculate_order_price() {
+	public void should_calculate_order_amount() {
 		// TODO:
 
 	}
