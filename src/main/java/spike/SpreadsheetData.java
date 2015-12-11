@@ -55,40 +55,38 @@ public class SpreadsheetData {
 		Row header = orderSheet.getRow(headerIdx);
 
 		for (Row row : orderSheet) {
-			if (!isEmpty(row)) {
-				if (!isHeaderRow(row)) {
-					TestCaseData testCaseData = new TestCaseData();
-					Iterator<Cell> headerIterator = header.cellIterator();
+			if (!isEmpty(row) && !isHeaderRow(row)) {
+				TestCaseData testCaseData = new TestCaseData();
+				Iterator<Cell> headerIterator = header.cellIterator();
 
-					while (headerIterator.hasNext()) {
-						Cell headerCell = (Cell) headerIterator.next();
-						String fieldName = headerCell.getStringCellValue();
+				while (headerIterator.hasNext()) {
+					Cell headerCell = (Cell) headerIterator.next();
+					String fieldName = headerCell.getStringCellValue();
 
-						if (fieldName.startsWith("testCase")) {
-							// testCaseData.setTestCaseId(row.getCell(0).getStringCellValue());
-							testCaseData.setTestCaseId(Double.toString(row.getCell(0).getNumericCellValue())); // FIXME:
-							continue;
-						}
+					if (fieldName.startsWith("testCase")) {
+						// testCaseData.setTestCaseId(row.getCell(0).getStringCellValue());
+						testCaseData.setTestCaseId(Double.toString(row.getCell(0).getNumericCellValue())); // FIXME:
+						continue;
+					}
 
-						try {
-							Order order = loadOrderFromRow(row, header.cellIterator());
-							testCaseData.setOrder(order);
+					try {
+						Order order = loadOrderFromRow(row, header.cellIterator());
+						testCaseData.setOrder(order);
 
-							OrderDetails orderDetails = loadOrderDetailsFromSheetForTest(orderDetailSheet,
-									testCaseData.getTestCaseId());
+						OrderDetails orderDetails = loadOrderDetailsFromSheetForTest(orderDetailSheet,
+								testCaseData.getTestCaseId());
 
-							testCaseData.setOrderDetails(orderDetails);
+						testCaseData.setOrderDetails(orderDetails);
 
-							rows.add(testCaseData);
-
-						} catch (InstantiationException e) {
-							e.printStackTrace();
-						} catch (IllegalAccessException e) {
-							e.printStackTrace();
-						}
+						rows.add(testCaseData);
+					} catch (InstantiationException e) {
+						e.printStackTrace();
+					} catch (IllegalAccessException e) {
+						e.printStackTrace();
 					}
 				}
 			}
+
 		}
 
 		return rows;
@@ -100,22 +98,17 @@ public class SpreadsheetData {
 		Row header = sheet.getRow(headerIdx);
 
 		for (Row row : sheet) {
-			if (!isEmpty(row)) {
-				if (!isHeaderRow(row)) {
-					// locate the correct test case Id and populate OrderDetail
-					Double value = row.getCell(0).getNumericCellValue(); // FIXME:
-																			// cleanup!
-
-					System.out.println(String.format("Comparing %s with %s", value, testCaseId));
-
-					if (Double.toString(value).equals(testCaseId)) {
-						try {
-							orderDetails = loadObject(OrderDetails.class, row, header.cellIterator());
-						} catch (InstantiationException e) {
-							e.printStackTrace();
-						} catch (IllegalAccessException e) {
-							e.printStackTrace();
-						}
+			if (!isEmpty(row) && !isHeaderRow(row)) {
+				// locate the correct test case Id and populate OrderDetail
+				Double value = row.getCell(0).getNumericCellValue(); // FIXME:cleanup!
+				System.out.println(String.format("Comparing %s with %s", value, testCaseId));
+				if (Double.toString(value).equals(testCaseId)) {
+					try {
+						orderDetails = loadObject(OrderDetails.class, row, header.cellIterator());
+					} catch (InstantiationException e) {
+						e.printStackTrace();
+					} catch (IllegalAccessException e) {
+						e.printStackTrace();
 					}
 				}
 			}
@@ -123,12 +116,13 @@ public class SpreadsheetData {
 		return orderDetails;
 	}
 
-	private Order loadOrderFromRow(Row row, Iterator cellItr) throws InstantiationException, IllegalAccessException {
+	private Order loadOrderFromRow(Row row, Iterator<Cell> cellItr)
+			throws InstantiationException, IllegalAccessException {
 		Order order = loadObject(Order.class, row, cellItr);
 		return order;
 	}
 
-	private <T> T loadObject(Class<T> klass, Row row, Iterator cellItr)
+	private <T> T loadObject(Class<T> klass, Row row, Iterator<Cell> cellItr)
 			throws InstantiationException, IllegalAccessException {
 		System.out.println(String.format("Populating %s instance", klass.getSimpleName()));
 		T obj = klass.newInstance();
