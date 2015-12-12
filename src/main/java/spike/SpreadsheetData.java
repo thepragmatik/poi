@@ -48,6 +48,7 @@ public class SpreadsheetData {
 		Sheet orderSheet = workbook.getSheet("Orders");
 		Sheet orderDetailSheet = workbook.getSheet("OrderDetails");
 		Sheet assertionSheet = workbook.getSheet("Assertions");
+		
 
 		List<TestCaseData> rows = new ArrayList<TestCaseData>();
 		short headerIdx = orderSheet.getTopRow();
@@ -65,29 +66,28 @@ public class SpreadsheetData {
 					if (fieldName.startsWith("testCase")) {
 						// testCaseData.setTestCaseId(row.getCell(0).getStringCellValue());
 						testCaseData.setTestCaseId(Double.toString(row.getCell(0).getNumericCellValue())); // FIXME:
-						continue;
-					}
-
-					try {
-						Order order = loadOrderFromRow(row, header.cellIterator());
-						testCaseData.setOrder(order);
-
-						OrderDetails orderDetails = loadOrderDetailsFromSheetForTest(orderDetailSheet,
-								testCaseData.getTestCaseId());
-
-						testCaseData.setOrderDetails(orderDetails);
-
-						rows.add(testCaseData);
-					} catch (InstantiationException e) {
-						e.printStackTrace();
-					} catch (IllegalAccessException e) {
-						e.printStackTrace();
+						break;
 					}
 				}
-			}
+				
+				try {
+					Order order = loadOrderFromRow(row, header.cellIterator());
+					testCaseData.setOrder(order);
 
+					OrderDetails orderDetails = loadOrderDetailsFromSheetForTest(orderDetailSheet,
+							testCaseData.getTestCaseId());
+
+					testCaseData.setOrderDetails(orderDetails);
+
+					rows.add(testCaseData);
+				} catch (InstantiationException e) {
+					e.printStackTrace();
+				} catch (IllegalAccessException e) {
+					e.printStackTrace();
+				}
+			} 
 		}
-
+		
 		return rows;
 	}
 
